@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from app.db.session import engine, Base
-from app.modules.users.routes import router as users_router
+from app.modules.auth.routes import router as auth_router
 
 app = FastAPI()
 
@@ -12,4 +12,4 @@ async def root():
     return {"message": "Welcome Stranger!"}
 
 # Include routers
-app.include_router(users_router, prefix="/api/users", tags=["users"])
+app.include_router(auth_router, prefix="/api/auth", tags=["auth"])

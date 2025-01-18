@@ -1,16 +1,17 @@
 from logging.config import fileConfig
 import os
 from dotenv import load_dotenv
-from sqlalchemy import engine_from_config, pool
+from sqlalchemy import engine_from_config, pool, MetaData
 from alembic import context
-from app.db.session import Base
 from app.modules.users.models import User
+from app.modules.chatbots.models import Chatbot, Session, Interaction
 
 load_dotenv()
 
 config = context.config
 
 database_url = os.getenv("DATABASE_URL")
+
 if not database_url:
     raise ValueError("DATABASE_URL is not set in the environment variables.")
 
@@ -19,7 +20,13 @@ config.set_main_option("sqlalchemy.url", database_url)
 if config.config_file_name is not None:
     fileConfig(config.config_file_name)
 
-target_metadata = Base.metadata
+metadata = MetaData()
+
+for model in [User, Chatbot, Session, Interaction]:
+    for table in model.metadata.tables.values():
+        table.tometadata(metadata)
+
+target_metadata = metadata
 
 def run_migrations_offline() -> None:
     """Run migrations in 'offline' mode."""

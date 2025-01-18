@@ -4,7 +4,7 @@ from dotenv import load_dotenv
 from sqlalchemy import engine_from_config, pool
 from alembic import context
 from app.db.session import Base
-from app.modules.users.models import User  # Import the User model
+from app.modules.users.models import User
 
 load_dotenv()
 
